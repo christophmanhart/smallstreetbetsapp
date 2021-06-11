@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "323478358224",
+    "project_id": "smallstreetbetsapp",
+    "storage_bucket": "smallstreetbetsapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:323478358224:android:22f854e60adbba3493f6d5",
+        "android_client_info": {
+          "package_name": "com.ssb.smallstreetbetsapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "323478358224-j6r45qeqhaeauueqvqjtvqhif0u8vgrj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCk3CyQUo4H1ncf9r5hceOTAxykS6EHwsc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "323478358224-j6r45qeqhaeauueqvqjtvqhif0u8vgrj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
