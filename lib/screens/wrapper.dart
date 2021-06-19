@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
-import 'package:smallstreetbetsapp/main.dart';
 import 'package:smallstreetbetsapp/models/the_user.dart';
 import 'package:smallstreetbetsapp/screens/home/home.dart';
 

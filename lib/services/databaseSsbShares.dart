@@ -1,65 +1,49 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:enum_to_string/enum_to_string.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:smallstreetbetsapp/models/ssbshares.dart';
-import 'package:smallstreetbetsapp/models/ssbuser.dart';
-import 'package:smallstreetbetsapp/models/the_user.dart';
 import 'package:smallstreetbetsapp/shared/empfehlung.dart';
 
-class DatabaseService {
-  final String uid;
-
-  DatabaseService({this.uid});
-
-  //Ssbuser
-  //collection reference
-  final CollectionReference ssbusersCollection =
-      FirebaseFirestore.instance.collection('ssbusers');
-
-  Future updateUserData(String name) async {
-    return await ssbusersCollection.doc(uid).set({
-      "name": name,
-    });
-  }
-
-  //ssbuser list from snapshot
-  List<Ssbuser> _ssbuserListFromSnapshot(QuerySnapshot snapshot) {
-    return snapshot.docs.map((doc) {
-      return Ssbuser(
-        name: doc.data()["name"] ?? "",
-      );
-    }).toList();
-  }
-
-  // userData from snapshot
-  UserData _userDataFromSnapshot(DocumentSnapshot snapshot) {
-    return UserData(
-      uid: uid,
-      name: snapshot.data()["name"],
-    );
-  }
-
-  // get ssbusers stream
-  Stream<List<Ssbuser>> get ssbusers {
-    return ssbusersCollection.snapshots().map(_ssbuserListFromSnapshot);
-  }
-
-  // get user doc stream
-  Stream<UserData> get userData {
-    return ssbusersCollection.doc(uid).snapshots().map(_userDataFromSnapshot);
-  }
-
+class DatabaseSsbSharesService {
   //SsbShares
   //collection reference
   final CollectionReference ssbSharesCollection =
       FirebaseFirestore.instance.collection('ssbshares');
 
+  //update old
   Future updateSharesData(
       String name, String wkn, double zielkurs, Empfehlung empfehlung) async {
-    return await ssbSharesCollection.doc(uid).set({
+    return await ssbSharesCollection
+        .doc(FirebaseAuth.instance.currentUser.uid)
+        .set({
       "name": name,
       "wkn": wkn,
       "zielkurs": zielkurs,
       "empfehlung": empfehlung.toString(),
+    });
+  }
+
+  //update new
+  Future newUpdateSharesData(String name, String wkn, double zielkurs,
+      Empfehlung empfehlung, String id) async {
+    return await ssbSharesCollection.doc().set({
+      "name": name,
+      "wkn": wkn,
+      "zielkurs": zielkurs,
+      "empfehlung": empfehlung.toString(),
+      // TODO cmn die geholten Einträge in Liste abspeichern
+    });
+  }
+
+  // add
+  Future addSharesData(
+      String name, String wkn, String zielkurs, Empfehlung empfehlung) async {
+    return await ssbSharesCollection.doc().set({
+      "name": name,
+      "wkn": wkn,
+      "zielkurs": zielkurs,
+      "empfehlung": empfehlung.toString().split('.').last,
+      "uid": FirebaseAuth.instance.currentUser.uid,
     });
   }
 
@@ -69,8 +53,9 @@ class DatabaseService {
       return SsbShares(
         name: doc.data()["name"] ?? "Name",
         wkn: doc.data()["wkn"] ?? "WKN",
-        zielkurs: doc.data()["zielkurs"] ?? 0.00,
-        empfehlung: EnumToString.fromString(Empfehlung.values, doc.data()["empfehlung"] ?? "buy"),
+        zielkurs: doc.data()["zielkurs"] ?? "Zielkurs",
+        empfehlung: EnumToString.fromString(
+            Empfehlung.values, doc.data()["empfehlung"] ?? "buy"),
       );
     }).toList();
   }
@@ -78,11 +63,12 @@ class DatabaseService {
   // ssbSharesData from snapshot
   SsbSharesData _ssbSharesDataFromSnapshot(DocumentSnapshot snapshot) {
     return SsbSharesData(
-      uid: uid,
+      uid: FirebaseAuth.instance.currentUser.uid,
       name: snapshot.data()["name"],
       wkn: snapshot.data()["wkn"],
       zielkurs: snapshot.data()["zielkurs"],
       empfehlung: snapshot.data()["empfehlung"],
+      id: snapshot.id,
     );
   }
 
@@ -94,7 +80,7 @@ class DatabaseService {
   // get shares doc stream
   Stream<SsbSharesData> get ssbSharesData {
     return ssbSharesCollection
-        .doc(uid)
+        .doc(FirebaseAuth.instance.currentUser.uid)
         .snapshots()
         .map(_ssbSharesDataFromSnapshot);
   }
