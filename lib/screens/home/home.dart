@@ -1,18 +1,19 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:smallstreetbetsapp/models/ssbuser.dart';
+import 'package:smallstreetbetsapp/models/ssbshares.dart';
 import 'package:smallstreetbetsapp/screens/home/settings_form.dart';
-import 'package:smallstreetbetsapp/screens/home/ssbusers_list.dart';
+import 'package:smallstreetbetsapp/screens/home/ssbshares_form.dart';
+import 'package:smallstreetbetsapp/screens/home/ssbshares_list.dart';
 import 'package:smallstreetbetsapp/services/auth.dart';
 import 'package:smallstreetbetsapp/services/database.dart';
+import 'package:smallstreetbetsapp/services/databaseSsbShares.dart';
 
 class Home extends StatelessWidget {
   Home({Key key, this.title}) : super(key: key);
 
   final String title;
-
+/*
   Widget _buildListItem(
       BuildContext context, DocumentSnapshot documentSnapshot) {
     return ListTile(
@@ -36,6 +37,7 @@ class Home extends StatelessWidget {
       },
     );
   }
+  */
 
   final AuthService _auth = AuthService();
 
@@ -46,39 +48,48 @@ class Home extends StatelessWidget {
         context: context,
         builder: (context) {
           return Container(
-            padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 60.0),
-            child: SettingsForm(),
+            //color: Colors.pink[900],
+            //TODO cmn hier noch Hintergrundfarbe einfügen
+            padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 30.0),
+            //child: SettingsForm(),
+            child: SsbSharesForm(),
           );
         },
       );
     }
 
-    return StreamProvider<List<Ssbuser>>.value(
-      value: DatabaseService().ssbusers,
+    return StreamProvider<List<SsbShares>>.value(
+      value: DatabaseSsbSharesService().ssbShares,
       child: Scaffold(
-        backgroundColor: Colors.brown[50],
+        backgroundColor: Colors.green[400],
         appBar: AppBar(
           // hier nochmal schauen, wieso das mit title nicht mehr funktioniert
           //title: Text(title),
-          title: Text("Home"),
-          backgroundColor: Colors.brown[400],
+          title: Text("SmallStreetBets"),
+          backgroundColor: Colors.green[400],
           elevation: 0.0,
           actions: <Widget>[
+            FlatButton.icon(
+              onPressed: () => _showSettingsPanel(),
+              icon: Icon(
+                Icons.add,
+                color: Colors.white,
+              ),
+              label: Text(""),
+            ),
             FlatButton.icon(
               onPressed: () async {
                 await _auth.signOut();
               },
-              icon: Icon(Icons.person),
-              label: Text("logout"),
+              icon: Icon(
+                Icons.logout,
+                color: Colors.white,
+              ),
+              label: Text(""),
             ),
-            FlatButton.icon(
-              onPressed: () => _showSettingsPanel(),
-              icon: Icon(Icons.settings),
-              label: Text("settings"),
-            )
           ],
         ),
-        body: SsbusersList(),
+        body: SsbSharesList(),
       ),
     );
   }
