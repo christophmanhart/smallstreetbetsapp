@@ -1,14 +1,8 @@
-import 'package:enum_to_string/enum_to_string.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:smallstreetbetsapp/models/ssbshares.dart';
-import 'package:smallstreetbetsapp/models/the_user.dart';
-import 'package:smallstreetbetsapp/services/database.dart';
 import 'package:smallstreetbetsapp/services/databaseSsbShares.dart';
 import 'package:smallstreetbetsapp/shared/constants.dart';
 import 'package:smallstreetbetsapp/shared/empfehlung.dart';
-import 'package:smallstreetbetsapp/shared/loading.dart';
 
 class SsbSharesForm extends StatefulWidget {
   @override
@@ -42,7 +36,11 @@ class _SsbSharesFormState extends State<SsbSharesForm> {
         });
     */
 
-    return _dataLoadedForm(context);
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 50.0),
+      color: Colors.orange[700],
+      child: _dataLoadedForm(context),
+    );
   }
 
   Widget _dataLoadedForm(BuildContext context) {
@@ -50,11 +48,12 @@ class _SsbSharesFormState extends State<SsbSharesForm> {
       key: _formKey,
       child: Column(
         children: <Widget>[
+          SizedBox(
+            height: 80.0,
+          ),
           Text(
             "Empfehlung hinzufügen",
-            style: TextStyle(
-              fontSize: 18.0,
-            ),
+            style: TextStyle(fontSize: 24.0, color: Colors.white),
           ),
           SizedBox(
             height: 15.0,
@@ -104,6 +103,7 @@ class _SsbSharesFormState extends State<SsbSharesForm> {
                     ),
                      */
           //Slider -> wie gut schätzen wir die Chancen der Aktie ein?
+          /*
           Slider(
             value: (_currentValueEmpfehlung),
             //value: (_currentAlter ?? userData.alter).toDouble(),
@@ -135,20 +135,87 @@ class _SsbSharesFormState extends State<SsbSharesForm> {
                   onChanged: (value) => setState(() => _currentAlter = value),
                 ),
                  */
+           */
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Text(
-                "  👍🏻",
-                style: TextStyle(fontSize: 20.0),
+              GestureDetector(
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: _currentEmpfehlung == Empfehlung.dontbuy
+                        ? Colors.blueAccent
+                        : null,
+                    border: Border.all(
+                      color: Colors.white,
+                      width: 2.0,
+                    ),
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  child: Padding(
+                    padding: EdgeInsets.all(6.0),
+                    child: Text(
+                      "💩",
+                      style: TextStyle(fontSize: 20.0),
+                    ),
+                  ),
+                ),
+                onTap: () {
+                  setState(() {
+                    _currentEmpfehlung = Empfehlung.dontbuy;
+                  });
+                },
               ),
-              Text(
-                "  💩",
-                style: TextStyle(fontSize: 20.0),
+              GestureDetector(
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: _currentEmpfehlung == Empfehlung.hold
+                        ? Colors.blueAccent
+                        : null,
+                    border: Border.all(
+                      color: Colors.white,
+                      width: 2.0,
+                    ),
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  child: Padding(
+                    padding: EdgeInsets.all(6.0),
+                    child: Text(
+                      "👐🏻",
+                      style: TextStyle(fontSize: 20.0),
+                    ),
+                  ),
+                ),
+                onTap: () {
+                  setState(() {
+                    _currentEmpfehlung = Empfehlung.hold;
+                  });
+                },
               ),
-              Text(
-                "👐🏻  ",
-                style: TextStyle(fontSize: 26.0),
+              GestureDetector(
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: _currentEmpfehlung == Empfehlung.buy
+                        ? Colors.blueAccent
+                        : null,
+                    border: Border.all(
+                      color: Colors.white,
+                      width: 2.0,
+                    ),
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  child: Padding(
+                    padding: EdgeInsets.all(6.0),
+                    child: Text(
+                      "👍🏻",
+                      style: TextStyle(fontSize: 20.0),
+                    ),
+                  ),
+                ),
+                onTap: () {
+                  setState(() {
+                    _currentEmpfehlung = Empfehlung.buy;
+                  });
+                },
               ),
             ],
           ),

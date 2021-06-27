@@ -6,8 +6,9 @@ class SsbShares {
   final String zielkurs;
   final Empfehlung empfehlung;
   final String id;
+  final String documentId;
 
-  SsbShares({this.name, this.wkn, this.zielkurs, this.empfehlung, this.id});
+  SsbShares({this.name, this.wkn, this.zielkurs, this.empfehlung, this.id, this.documentId});
 }
 
 class SsbSharesData {

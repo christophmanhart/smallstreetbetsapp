@@ -13,45 +13,18 @@ class Home extends StatelessWidget {
   Home({Key key, this.title}) : super(key: key);
 
   final String title;
-/*
-  Widget _buildListItem(
-      BuildContext context, DocumentSnapshot documentSnapshot) {
-    return ListTile(
-      title: Row(
-        children: [
-          Expanded(
-            child: Text(
-              documentSnapshot['name'],
-              style: Theme.of(context).textTheme.headline5,
-            ),
-          ),
-          Text(
-            documentSnapshot['wkn'].toString(),
-            style: Theme.of(context).textTheme.headline5,
-          ),
-        ],
-      ),
-      onTap: () {
-        // TODO cmn
-        //  hier muss noch geupdatet werden oder was geschrieben werden
-      },
-    );
-  }
-  */
-
   final AuthService _auth = AuthService();
 
   @override
   Widget build(BuildContext context) {
     void _showSettingsPanel() {
       showModalBottomSheet(
+        isScrollControlled: true,
         context: context,
         builder: (context) {
           return Container(
-            //color: Colors.pink[900],
+            color: Colors.orange[700],
             //TODO cmn hier noch Hintergrundfarbe einfügen
-            padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 30.0),
-            //child: SettingsForm(),
             child: SsbSharesForm(),
           );
         },
@@ -59,72 +32,123 @@ class Home extends StatelessWidget {
     }
 
     return StreamProvider<List<SsbShares>>.value(
-      value: DatabaseSsbSharesService().ssbShares,
-      child: Scaffold(
-        backgroundColor: Colors.green[400],
-        appBar: AppBar(
-          // hier nochmal schauen, wieso das mit title nicht mehr funktioniert
-          //title: Text(title),
-          title: Text("SmallStreetBets"),
-          backgroundColor: Colors.green[400],
-          elevation: 0.0,
-          actions: <Widget>[
-            FlatButton.icon(
-              onPressed: () => _showSettingsPanel(),
-              icon: Icon(
-                Icons.add,
-                color: Colors.white,
+      //value: DatabaseSsbSharesService().ssbShares,
+      value: _returnOrder(context, "Neuste"),
+      child: DefaultTabController(
+        length: tabChoices.length,
+        child: Scaffold(
+          backgroundColor: Colors.orange[700],
+          appBar: AppBar(
+            // hier nochmal schauen, wieso das mit title nicht mehr funktioniert
+            //title: Text(title),
+            title: Text("HavenWayBets"),
+            backgroundColor: Colors.orange[700],
+            elevation: 0.0,
+            actions: <Widget>[
+              FlatButton.icon(
+                onPressed: () => _showSettingsPanel(),
+                icon: Icon(
+                  Icons.add,
+                  color: Colors.white,
+                ),
+                label: Text(""),
               ),
-              label: Text(""),
-            ),
-            FlatButton.icon(
-              onPressed: () async {
-                await _auth.signOut();
-              },
-              icon: Icon(
-                Icons.logout,
-                color: Colors.white,
+              FlatButton.icon(
+                onPressed: () async {
+                  await _auth.signOut();
+                },
+                icon: Icon(
+                  Icons.logout,
+                  color: Colors.white,
+                ),
+                label: Text(""),
               ),
-              label: Text(""),
+            ],
+            bottom: TabBar(
+              isScrollable: true,
+              tabs: tabChoices.map<Widget>((TabChoices tabChoices) {
+                return Tab(
+                  text: tabChoices.title,
+                  icon: Icon(tabChoices.icon),
+                );
+              }).toList(),
             ),
-          ],
+          ),
+          body: TabBarView(
+            children: tabChoices.map((TabChoices tabChoices) {
+              return TabChoicesPage(
+                tabChoices: tabChoices,
+              );
+            }).toList(),
+          ),
+          //SsbSharesList(),
         ),
-        body: SsbSharesList(),
       ),
     );
   }
 }
 
-/*
-StreamBuilder(
-stream: FirebaseFirestore.instance.collection('sharenames').snapshots(),
-builder: (context, snapshot) {
-if (!snapshot.hasData) return const Text('Loading');
-return ListView.builder(
-itemCount: snapshot.data.documents.length,
-itemBuilder: (context, index) =>
-_buildListItem(context, snapshot.data.documents[index]),
-);
-},
-),
-*/
+//TODO cmn das noch schöner gestalten, wie lagere ich das am besten aus?
 
-/*
-Row(
-children: [
-Expanded(
-child: Text(
-"Name",
-style: Theme.of(context).textTheme.headline5,
-),
-),
-Text(
-"WKN",
-style: Theme.of(context).textTheme.headline5,
-),
-],
-),
-SizedBox(
-height: 10,
-),
-*/
+class TabChoices {
+  final String title;
+  final IconData icon;
+
+  const TabChoices({this.title, this.icon});
+}
+
+const List<TabChoices> tabChoices = <TabChoices>[
+  TabChoices(
+    title: "Neuste",
+    icon: Icons.fiber_new,
+  ),
+  TabChoices(
+    title: "Hot",
+    icon: Icons.local_fire_department,
+  ),
+  TabChoices(
+    title: "Profil",
+    icon: Icons.person,
+  ),
+];
+
+class TabChoicesPage extends StatelessWidget {
+  const TabChoicesPage({Key key, this.tabChoices}) : super(key: key);
+  final TabChoices tabChoices;
+
+  @override
+  Widget build(BuildContext context) {
+    final TextStyle textStyle = Theme.of(context).textTheme.display1;
+
+    return Container(
+      child: _showPage(context, tabChoices.title),
+    );
+  }
+}
+
+Widget _showPage(BuildContext context, String title) {
+  if (title == 'Hot') {
+    return SsbSharesList();
+  } else if (title == 'Neuste') {
+    return SsbSharesList();
+  } else if (title == 'Profil') {
+    return Icon(
+      Icons.construction,
+      size: 100.0,
+    );
+  } else {
+    return null;
+  }
+}
+
+Stream<List<SsbShares>> _returnOrder(BuildContext context, String title) {
+  if (title == 'Hot') {
+    return DatabaseSsbSharesService().ssbSharesHot;
+  } else if (title == 'Neuste') {
+    return DatabaseSsbSharesService().ssbShares;
+  } else if (title == 'Profil') {
+    return DatabaseSsbSharesService().ssbShares;
+  } else {
+    return null;
+  }
+}

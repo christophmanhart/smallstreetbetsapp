@@ -34,7 +34,7 @@ class _RegisterState extends State<Register> {
             appBar: AppBar(
               backgroundColor: Colors.green[400],
               elevation: 0.0,
-              title: Text("Bei SSB registrieren"),
+              title: Text("Bei HWB registrieren"),
               actions: <Widget>[
                 FlatButton.icon(
                   onPressed: () {
@@ -62,9 +62,8 @@ class _RegisterState extends State<Register> {
                     ),
                     TextFormField(
                       decoration:
-                      textInputDecoration.copyWith(hintText: "Name"),
-                      validator: (value) =>
-                      value.isEmpty ? "Name fehlt" : null,
+                          textInputDecoration.copyWith(hintText: "Name"),
+                      validator: (value) => value.isEmpty ? "Name fehlt" : null,
                       onChanged: (value) {
                         setState(() => name = value.trim());
                       },
@@ -99,8 +98,8 @@ class _RegisterState extends State<Register> {
                       height: 20.0,
                     ),
                     TextFormField(
-                      decoration:
-                      textInputDecoration.copyWith(hintText: "Passwort erneut eingeben"),
+                      decoration: textInputDecoration.copyWith(
+                          hintText: "Passwort erneut eingeben"),
                       validator: (value) => value.length < 6
                           ? "Das Passwort muss mindestens 6 Zeichen lang sein"
                           : null,
@@ -121,25 +120,25 @@ class _RegisterState extends State<Register> {
                         ),
                       ),
                       onPressed: () async {
-                        if (_formKey.currentState.validate()) {
-                          setState(() => loading = true);
-                          if(password == passwordUeberpruefung) {
-                            dynamic result = await _auth
-                                .registerWithEmailAndPassword(email, password, name);
+                        if (password == passwordUeberpruefung) {
+                          if (_formKey.currentState.validate()) {
+                            setState(() => loading = true);
+                            dynamic result =
+                                await _auth.registerWithEmailAndPassword(
+                                    email, password, name);
                             if (result == null) {
                               setState(() {
                                 error =
-                                "Bitte eine valide E-Mail Adresse eingeben";
-                                loading = false;
-                              });
-                            } else {
-                              setState(() {
-                                error =
-                                "Passwörter müssen gleich sein";
+                                    "Bitte eine valide E-Mail Adresse eingeben";
                                 loading = false;
                               });
                             }
                           }
+                        } else {
+                          setState(() {
+                            error = "Passwörter müssen gleich sein";
+                            loading = false;
+                          });
                         }
                       },
                     ),
