@@ -12,11 +12,15 @@ class _SsbSharesListState extends State<SsbSharesList> {
   @override
   Widget build(BuildContext context) {
     final ssbshares = Provider.of<List<SsbShares>>(context) ?? [];
+    //ssbshares.sort()
 
     return ListView.builder(
       itemCount: ssbshares.length,
       itemBuilder: (context, index) {
-        return SsbSharesTile(ssbshares: ssbshares[index]);
+        return SsbSharesTile(
+          ssbshares: ssbshares[index],
+          index: index,
+        );
       },
     );
   }
