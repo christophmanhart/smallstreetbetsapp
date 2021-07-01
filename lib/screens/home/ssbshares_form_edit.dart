@@ -21,6 +21,7 @@ class _SsbSharesFormEditState extends State<SsbSharesFormEdit> {
   // form values
   String _currentName;
   String _currentWkn;
+
   //Empfehlung _currentEmpfehlung = ssbshares.empfehlung;
   String _currentZielkurs;
 
@@ -29,13 +30,16 @@ class _SsbSharesFormEditState extends State<SsbSharesFormEdit> {
     return Scaffold(
       body: Container(
         padding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 50.0),
-        color: Colors.orange[700],
+        color: Colors.grey[850],
         child: _dataLoadedForm(context),
       ),
     );
   }
 
   Widget _dataLoadedForm(BuildContext context) {
+    //_currentName = widget.ssbshares.name;
+    //_currentWkn = widget.ssbshares.wkn;
+    //_currentZielkurs = widget.ssbshares.zielkurs;
 
     return Form(
       key: _formKey,
@@ -58,7 +62,7 @@ class _SsbSharesFormEditState extends State<SsbSharesFormEdit> {
                 width: 8.0,
               ),
               Text(
-                "Empfehlung hinzufügen",
+                "Empfehlung aktualisieren",
                 style: TextStyle(fontSize: 24.0, color: Colors.white),
               ),
             ],
@@ -101,7 +105,7 @@ class _SsbSharesFormEditState extends State<SsbSharesFormEdit> {
                 child: Container(
                   decoration: BoxDecoration(
                     color: widget.currentEmpfehlung == Empfehlung.dontbuy
-                        ? Colors.blueAccent
+                        ? Colors.white
                         : null,
                     border: Border.all(
                       color: Colors.white,
@@ -127,7 +131,7 @@ class _SsbSharesFormEditState extends State<SsbSharesFormEdit> {
                 child: Container(
                   decoration: BoxDecoration(
                     color: widget.currentEmpfehlung == Empfehlung.hold
-                        ? Colors.blueAccent
+                        ? Colors.white
                         : null,
                     border: Border.all(
                       color: Colors.white,
@@ -153,7 +157,7 @@ class _SsbSharesFormEditState extends State<SsbSharesFormEdit> {
                 child: Container(
                   decoration: BoxDecoration(
                     color: widget.currentEmpfehlung == Empfehlung.buy
-                        ? Colors.blueAccent
+                        ? Colors.white
                         : null,
                     border: Border.all(
                       color: Colors.white,
@@ -190,9 +194,16 @@ class _SsbSharesFormEditState extends State<SsbSharesFormEdit> {
               ),
               onPressed: () {
                 setState(() {
-                  // TODO cmn updateSharesData
-                  // DatabaseSsbSharesService().updateSharesData(ssbshares.documentId);
                   if (_formKey.currentState.validate()) {
+                    if(_currentName == null) {
+                      _currentName = widget.ssbshares.name;
+                    }
+                    if(_currentWkn == null) {
+                      _currentWkn = widget.ssbshares.wkn;
+                    }
+                    if(_currentZielkurs == null) {
+                      _currentZielkurs= widget.ssbshares.zielkurs;
+                    }
                     DatabaseSsbSharesService().updateSharesData(
                       _currentName,
                       _currentWkn,
