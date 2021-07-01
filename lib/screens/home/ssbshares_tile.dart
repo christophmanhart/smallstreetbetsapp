@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:smallstreetbetsapp/models/ssbshares.dart';
+import 'package:smallstreetbetsapp/screens/home/ssbshares_form_detail.dart';
 import 'package:smallstreetbetsapp/screens/home/ssbshares_form_edit.dart';
 import 'package:smallstreetbetsapp/services/databaseSsbShares.dart';
 import 'package:smallstreetbetsapp/shared/empfehlung.dart';
@@ -77,9 +78,11 @@ class _SsbSharesTileState extends State<SsbSharesTile> {
       actionPane: SlidableDrawerActionPane(),
       secondaryActions: <Widget>[
         Padding(
-          padding: EdgeInsets.only(top: 8.0),
+          padding: EdgeInsets.only(top: 2.0),
           child: Card(
-            margin: EdgeInsets.fromLTRB(0.0, 0.0, 4.0, 8.0),
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(25.0)),
+            margin: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 8.0),
             child: IconSlideAction(
               caption: 'Löschen',
               color: Colors.red,
@@ -89,7 +92,6 @@ class _SsbSharesTileState extends State<SsbSharesTile> {
                 // ignore: unnecessary_statements
                 Toast.show('Deleted ${widget.index}', context,
                     duration: Toast.LENGTH_SHORT, gravity: Toast.BOTTOM);
-                // TODO cmn hier soll dann gelöscht werden
                 DatabaseSsbSharesService()
                     .deleteSharesData(widget.ssbshares.documentId);
               },
@@ -101,9 +103,11 @@ class _SsbSharesTileState extends State<SsbSharesTile> {
       ],
       actions: <Widget>[
         Padding(
-          padding: EdgeInsets.only(top: 8.0),
+          padding: EdgeInsets.only(top: 2.0),
           child: Card(
-            margin: EdgeInsets.fromLTRB(4.0, 0.0, 0.0, 8.0),
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15.0)),
+            margin: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 8.0),
             child: IconSlideAction(
               caption: 'Bearbeiten',
               color: Colors.orange,
@@ -115,7 +119,10 @@ class _SsbSharesTileState extends State<SsbSharesTile> {
                     duration: Toast.LENGTH_SHORT, gravity: Toast.BOTTOM);
                 setState(() {
                   Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => SsbSharesFormEdit(ssbshares: widget.ssbshares, currentEmpfehlung: widget.ssbshares.empfehlung,)));
+                      builder: (context) => SsbSharesFormEdit(
+                            ssbshares: widget.ssbshares,
+                            currentEmpfehlung: widget.ssbshares.empfehlung,
+                          )));
                 });
               },
             ),
@@ -127,34 +134,108 @@ class _SsbSharesTileState extends State<SsbSharesTile> {
       dismissal: SlidableDismissal(
         child: SlidableDrawerDismissal(),
       ),
+      //TODO cmn Padding ist der title dann von:
+      /*
+      Card(
+  child: Padding(
+   padding: EdgeInsets.only(
+      top: 36.0, left: 6.0, right: 6.0, bottom: 6.0),
+      child: ExpansionTile(
+      title: Text('Birth of Universe'),
+        children: <Widget>[
+         Text('Big Bang'),
+         Text('Birth of the Sun'),
+         Text('Earth is Born'),
+      ],
+    ),
+  ),
+),
+       */
       child: Padding(
-        padding: EdgeInsets.only(top: 8.0),
-        child: Card(
-          margin: EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 8.0),
-          child: Row(
-            mainAxisSize: MainAxisSize.max,
-            children: <Widget>[
-              Expanded(
-                child: ListTile(
-                  leading: CircleAvatar(
-                    radius: 25.0,
-                    backgroundColor: _showIconBackgroundColor(context),
-                    child: _showIcon(context),
+        padding: EdgeInsets.only(top: 2.0),
+        child: GestureDetector(
+          child: Card(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15.0)),
+            margin: EdgeInsets.fromLTRB(8.0, 0.0, 8.0, 8.0),
+            child: Padding(
+              padding:
+                  EdgeInsets.only(left: 0.0, top: 4.0, right: 0.0, bottom: 4.0),
+              child: Row(
+                mainAxisSize: MainAxisSize.max,
+                children: <Widget>[
+                  Expanded(
+                    child: ListTile(
+                      leading: CircleAvatar(
+                        radius: 25.0,
+                        backgroundColor: _showIconBackgroundColor(context),
+                        child: _showIcon(context),
+                      ),
+                      title: Text(
+                        widget.ssbshares.name,
+                        style: TextStyle(
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      subtitle: Text(
+                        "${widget.ssbshares.wkn}",
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 14.0,
+                        ),
+                      ),
+                    ),
                   ),
-                  title: Text(widget.ssbshares.name),
-                  subtitle: Text("${widget.ssbshares.wkn}"),
-                ),
+                  Column(
+                    children: [
+                      Text(
+                        "Zielkurs: ${widget.ssbshares.zielkurs}€",
+                        style: TextStyle(
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 10.0,
+                      ),
+                      Text(
+                        "Dabei seit: ${widget.ssbshares.timestamp}",
+                        textAlign: TextAlign.right,
+                        style: TextStyle(
+                          fontSize: 15.0,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    width: 10.0,
+                  )
+                ],
               ),
-              Text("Zielkurs: ${widget.ssbshares.zielkurs}€"),
-              SizedBox(
-                width: 10.0,
-              )
-            ],
+            ),
+            shadowColor: Colors.black,
+            elevation: 8.0,
           ),
-          shadowColor: Colors.black,
-          elevation: 8.0,
+          onTap: () {
+            setState(
+              () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => SsbSharesFormDetail(
+                      ssbshares: widget.ssbshares,
+                    ),
+                  ),
+                );
+              },
+            );
+          },
+          //onLongPress: //Menü aufblasen,
+          //onLongPressMoveUpdate: //Hier die Movement Daten holen und die dann dem Widget übergeben,
         ),
       ),
     );
   }
 }
+
+//TODO cmn Widget welches ein float übergeben bekommt zwischen 0 und 1 und je nachdem wenn zwischen 0 und 0,33 wird erstes Emoji und so weiter, alles größer als 0,66 ist das letzte Emoji dann

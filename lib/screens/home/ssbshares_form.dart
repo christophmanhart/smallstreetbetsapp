@@ -38,7 +38,7 @@ class _SsbSharesFormState extends State<SsbSharesForm> {
 
     return Container(
       padding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 50.0),
-      color: Colors.orange[700],
+      color: Colors.grey[850],
       child: _dataLoadedForm(context),
     );
   }
@@ -143,7 +143,7 @@ class _SsbSharesFormState extends State<SsbSharesForm> {
                 child: Container(
                   decoration: BoxDecoration(
                     color: _currentEmpfehlung == Empfehlung.dontbuy
-                        ? Colors.blueAccent
+                        ? Colors.white
                         : null,
                     border: Border.all(
                       color: Colors.white,
@@ -169,7 +169,7 @@ class _SsbSharesFormState extends State<SsbSharesForm> {
                 child: Container(
                   decoration: BoxDecoration(
                     color: _currentEmpfehlung == Empfehlung.hold
-                        ? Colors.blueAccent
+                        ? Colors.white
                         : null,
                     border: Border.all(
                       color: Colors.white,
@@ -195,7 +195,7 @@ class _SsbSharesFormState extends State<SsbSharesForm> {
                 child: Container(
                   decoration: BoxDecoration(
                     color: _currentEmpfehlung == Empfehlung.buy
-                        ? Colors.blueAccent
+                        ? Colors.white
                         : null,
                     border: Border.all(
                       color: Colors.white,

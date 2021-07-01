@@ -4,12 +4,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl/intl.dart';
 import 'package:smallstreetbetsapp/models/ssbshares.dart';
 import 'package:smallstreetbetsapp/shared/empfehlung.dart';
+//TODO cmn hier sollen die User abgerufen werden - diese sind mit den eingeloggten Usern per ID verknüpft
 
 class DatabaseSsbSharesService {
   //SsbShares
   //collection reference
-  final CollectionReference ssbSharesCollection =
-      FirebaseFirestore.instance.collection('ssbshares');
+  final CollectionReference ssbUsersCollection =
+      FirebaseFirestore.instance.collection('ssbusers');
 
   //final f = new DateFormat('HH:mm\ndd.MM.yyyy');
   final f = new DateFormat('\ndd.MM.yyyy');
@@ -17,7 +18,7 @@ class DatabaseSsbSharesService {
   //update old
   Future oldUpdateSharesData(
       String name, String wkn, double zielkurs, Empfehlung empfehlung) async {
-    return await ssbSharesCollection
+    return await ssbUsersCollection
         .doc(FirebaseAuth.instance.currentUser.uid)
         .set({
       "name": name,
@@ -30,7 +31,7 @@ class DatabaseSsbSharesService {
   //update new - hier in doc auch die ID rein und dann easy
   Future updateSharesData(String name, String wkn, String zielkurs,
       Empfehlung empfehlung, String documentId) async {
-    return await ssbSharesCollection.doc(documentId).update({
+    return await ssbUsersCollection.doc(documentId).update({
       "name": name,
       "wkn": wkn,
       "zielkurs": zielkurs,
@@ -41,7 +42,7 @@ class DatabaseSsbSharesService {
   // add
   Future addSharesData(
       String name, String wkn, String zielkurs, Empfehlung empfehlung) async {
-    return await ssbSharesCollection.doc().set({
+    return await ssbUsersCollection.doc().set({
       "name": name,
       "wkn": wkn,
       "zielkurs": zielkurs,
@@ -53,7 +54,7 @@ class DatabaseSsbSharesService {
 
   // delete SharesData --> TODO cmn wie komme ich an die ID des Elements
   Future deleteSharesData(String documentId) async {
-    return await ssbSharesCollection.doc(documentId).delete();
+    return await ssbUsersCollection.doc(documentId).delete();
   }
 
   //ssbShares list from snapshot
@@ -88,7 +89,7 @@ class DatabaseSsbSharesService {
 
   // get ssbShares stream - TODO cmn String für den Namen übergeben
   Stream<List<SsbShares>> get ssbShares {
-    return ssbSharesCollection
+    return ssbUsersCollection
         .orderBy("timestamp", descending: true)
         .snapshots()
         .map(_ssbSharesListFromSnapshot);
@@ -96,7 +97,7 @@ class DatabaseSsbSharesService {
 
   // sortiert nach hot
   Stream<List<SsbShares>> get ssbSharesHot {
-    return ssbSharesCollection
+    return ssbUsersCollection
         .orderBy("empfehlung", descending: false)
         .snapshots()
         .map(_ssbSharesListFromSnapshot);
@@ -104,7 +105,7 @@ class DatabaseSsbSharesService {
 
   // get shares doc stream
   Stream<SsbSharesData> get ssbSharesData {
-    return ssbSharesCollection
+    return ssbUsersCollection
         .doc(FirebaseAuth.instance.currentUser.uid)
         .snapshots()
         .map(_ssbSharesDataFromSnapshot);

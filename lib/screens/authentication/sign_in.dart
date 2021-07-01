@@ -27,9 +27,9 @@ class _SignInState extends State<SignIn> {
     return loading
         ? Loading()
         : Scaffold(
-            backgroundColor: Colors.green[400],
+            backgroundColor: Colors.grey[850],
             appBar: AppBar(
-              backgroundColor: Colors.green[400],
+              backgroundColor: Colors.grey[850],
               elevation: 0.0,
               title: Text("Bei HWB einloggen"),
               actions: <Widget>[

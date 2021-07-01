@@ -25,7 +25,7 @@ class DatabaseService {
   List<Ssbuser> _ssbuserListFromSnapshot(QuerySnapshot snapshot) {
     return snapshot.docs.map((doc) {
       return Ssbuser(
-        name: doc.data()["name"] ?? "",
+        name: (doc.data() as Map)["name"] ?? "",
       );
     }).toList();
   }
@@ -34,7 +34,7 @@ class DatabaseService {
   UserData _userDataFromSnapshot(DocumentSnapshot snapshot) {
     return UserData(
       uid: uid,
-      name: snapshot.data()["name"],
+      name: (snapshot.data() as Map)["name"],
     );
   }
 
@@ -67,10 +67,10 @@ class DatabaseService {
   List<SsbShares> _ssbSharesListFromSnapshot(QuerySnapshot snapshot) {
     return snapshot.docs.map((doc) {
       return SsbShares(
-        name: doc.data()["name"] ?? "Name",
-        wkn: doc.data()["wkn"] ?? "WKN",
-        zielkurs: doc.data()["zielkurs"] ?? 0.00,
-        empfehlung: EnumToString.fromString(Empfehlung.values, doc.data()["empfehlung"] ?? "buy"),
+        name: (doc.data() as Map)["name"] ?? "Name",
+        wkn: (doc.data() as Map)["wkn"] ?? "WKN",
+        zielkurs: (doc.data() as Map)["zielkurs"] ?? 0.00,
+        empfehlung: EnumToString.fromString(Empfehlung.values, (doc.data() as Map)["empfehlung"] ?? "buy"),
       );
     }).toList();
   }
@@ -79,10 +79,10 @@ class DatabaseService {
   SsbSharesData _ssbSharesDataFromSnapshot(DocumentSnapshot snapshot) {
     return SsbSharesData(
       uid: uid,
-      name: snapshot.data()["name"],
-      wkn: snapshot.data()["wkn"],
-      zielkurs: snapshot.data()["zielkurs"],
-      empfehlung: snapshot.data()["empfehlung"],
+      name: (snapshot.data() as Map)["name"],
+      wkn: (snapshot.data() as Map)["wkn"],
+      zielkurs: (snapshot.data() as Map)["zielkurs"],
+      empfehlung: (snapshot.data() as Map)["empfehlung"],
     );
   }
 

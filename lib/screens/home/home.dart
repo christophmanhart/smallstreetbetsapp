@@ -5,6 +5,7 @@ import 'package:smallstreetbetsapp/models/ssbshares.dart';
 import 'package:smallstreetbetsapp/screens/home/settings_form.dart';
 import 'package:smallstreetbetsapp/screens/home/ssbshares_form.dart';
 import 'package:smallstreetbetsapp/screens/home/ssbshares_list.dart';
+import 'package:smallstreetbetsapp/screens/profile/profile.dart';
 import 'package:smallstreetbetsapp/services/auth.dart';
 import 'package:smallstreetbetsapp/services/database.dart';
 import 'package:smallstreetbetsapp/services/databaseSsbShares.dart';
@@ -23,8 +24,7 @@ class Home extends StatelessWidget {
         context: context,
         builder: (context) {
           return Container(
-            color: Colors.orange[700],
-            //TODO cmn hier noch Hintergrundfarbe einfügen
+            color: Colors.grey[850],
             child: SsbSharesForm(),
           );
         },
@@ -37,31 +37,41 @@ class Home extends StatelessWidget {
       child: DefaultTabController(
         length: tabChoices.length,
         child: Scaffold(
-          backgroundColor: Colors.orange[700],
+          backgroundColor: Colors.grey[850],
           appBar: AppBar(
             // hier nochmal schauen, wieso das mit title nicht mehr funktioniert
             //title: Text(title),
-            title: Text("HavenWayBets"),
-            backgroundColor: Colors.orange[700],
+            title: Text(
+              "HavenWayBets",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 25.0,
+              ),
+            ),
+            backgroundColor: Colors.grey[850],
             elevation: 0.0,
             actions: <Widget>[
-              FlatButton.icon(
-                onPressed: () => _showSettingsPanel(),
-                icon: Icon(
-                  Icons.add,
-                  color: Colors.white,
+              Padding(
+                padding: EdgeInsets.only(right: 18.0),
+                child: GestureDetector(
+                  child: Icon(
+                    Icons.add,
+                    color: Colors.white,
+                  ),
+                  onTap: () => _showSettingsPanel(),
                 ),
-                label: Text(""),
               ),
-              FlatButton.icon(
-                onPressed: () async {
-                  await _auth.signOut();
-                },
-                icon: Icon(
-                  Icons.logout,
-                  color: Colors.white,
+              Padding(
+                padding: EdgeInsets.only(right: 18.0),
+                child: GestureDetector(
+                  child: Icon(
+                    Icons.logout,
+                    color: Colors.white,
+                  ),
+                  onTap: () async {
+                    await _auth.signOut();
+                  },
                 ),
-                label: Text(""),
               ),
             ],
             bottom: TabBar(
@@ -132,10 +142,7 @@ Widget _showPage(BuildContext context, String title) {
   } else if (title == 'Neuste') {
     return SsbSharesList();
   } else if (title == 'Profil') {
-    return Icon(
-      Icons.construction,
-      size: 100.0,
-    );
+    return Profile();
   } else {
     return null;
   }

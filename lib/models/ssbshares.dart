@@ -7,8 +7,10 @@ class SsbShares {
   final Empfehlung empfehlung;
   final String id;
   final String documentId;
+  var timestamp;
 
-  SsbShares({this.name, this.wkn, this.zielkurs, this.empfehlung, this.id, this.documentId});
+
+  SsbShares({this.name, this.wkn, this.zielkurs, this.empfehlung, this.id, this.documentId, this.timestamp});
 }
 
 class SsbSharesData {
@@ -18,6 +20,7 @@ class SsbSharesData {
   final String zielkurs;
   final Empfehlung empfehlung;
   final String id;
+  var timestamp;
 
-  SsbSharesData({this.uid, this.name, this.wkn, this.zielkurs, this.empfehlung, this.id});
+  SsbSharesData({this.uid, this.name, this.wkn, this.zielkurs, this.empfehlung, this.id, this.timestamp});
 }
